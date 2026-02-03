@@ -1,4 +1,4 @@
-package com.walmir.DailyTracker;
+package com.walmir.dailytracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
