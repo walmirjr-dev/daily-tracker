@@ -52,6 +52,14 @@ public class CheckIn {
 		this.checkInDate = checkInDate;
 	}
 
+	public Challenge getChallenge() {
+		return challenge;
+	}
+
+	public void setChallenge(Challenge challenge) {
+		this.challenge = challenge;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

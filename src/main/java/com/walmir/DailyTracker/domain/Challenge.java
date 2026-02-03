@@ -68,6 +68,10 @@ public class Challenge {
 		this.durationDays = durationDays;
 	}
 
+	public List<CheckIn> getCheckIns() {
+		return checkIns;
+	}
+
 	public LocalDate getEndDate() {
 		return initialDate.plusDays(durationDays);
 	}
