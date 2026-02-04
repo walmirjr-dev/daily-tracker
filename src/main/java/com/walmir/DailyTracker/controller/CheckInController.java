@@ -40,7 +40,7 @@ public class CheckInController {
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CheckIn> findById(@PathVariable Long id) {
-		CheckIn entity = service.findbyId(id);
+		CheckIn entity = service.findById(id);
 
 		return ResponseEntity.ok().body(entity);
 	}

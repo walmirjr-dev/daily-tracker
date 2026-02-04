@@ -23,7 +23,7 @@ public class CheckInService {
 		return repository.findAll();
 	}
 
-	public CheckIn findbyId(Long id) {
+	public CheckIn findById(Long id) {
 		return repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(id));
 	}

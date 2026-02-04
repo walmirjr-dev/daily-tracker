@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.walmir.dailytracker.domain.Challenge;
+import com.walmir.dailytracker.dto.ChallengeResponseDTO;
 import com.walmir.dailytracker.service.ChallengeService;
 
 
@@ -27,16 +28,16 @@ public class ChallengeController {
 	private ChallengeService service;
 
 	@GetMapping
-	public ResponseEntity<List<Challenge>> findAll() {
+	public ResponseEntity<List<ChallengeResponseDTO>> findAll() {
 
-		List<Challenge> list = service.findAll();
+		List<ChallengeResponseDTO> list = service.findAll();
 
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Challenge> findById(@PathVariable Long id) {
-		Challenge entity = service.findbyId(id);
+	public ResponseEntity<ChallengeResponseDTO> findById(@PathVariable Long id) {
+		ChallengeResponseDTO entity = service.findById(id);
 
 		return ResponseEntity.ok().body(entity);
 	}
