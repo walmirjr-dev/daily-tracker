@@ -70,7 +70,7 @@ public class ChallengeService {
 
 		long totalCheckIns = checkInrepository.countByChallengeId(ChallengeId);
 
-		long daysPassed = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now());
+		long daysPassed = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
 
 		if (totalCheckIns >= daysPassed) {
 			throw new RuntimeException("You have already done the maximum number of checkins possible to this date");

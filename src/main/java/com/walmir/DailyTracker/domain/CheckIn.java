@@ -3,7 +3,7 @@ package com.walmir.dailytracker.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +24,7 @@ public class CheckIn {
 
 	@ManyToOne
 	@JoinColumn(name = "challenge_id")
+	@JsonIgnore
 	private Challenge challenge;
 
 	public CheckIn() {
