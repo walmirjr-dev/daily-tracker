@@ -1,5 +1,6 @@
 package com.walmir.dailytracker.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,7 +16,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_checkin")
-public class CheckIn {
+public class CheckIn implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

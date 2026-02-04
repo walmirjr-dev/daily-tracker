@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.walmir.dailytracker.domain.CheckIn;
 import com.walmir.dailytracker.repository.CheckInRepository;
+import com.walmir.dailytracker.service.exceptions.DatabaseException;
+import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
 
 
@@ -23,7 +25,7 @@ public class CheckInService {
 
 	public CheckIn findbyId(Long id) {
 		return repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("No checkin found in Id: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public CheckIn insert(CheckIn object) {
@@ -32,7 +34,7 @@ public class CheckInService {
 
 	public CheckIn update(CheckIn newEntity, Long id) {
 		CheckIn entity = repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("No checkin found in Id: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(id));
 		updateData(entity, newEntity);
 
 		return repository.save(entity);
@@ -40,13 +42,13 @@ public class CheckInService {
 
 	public void deleteById(Long id) {
 		if (!repository.existsById(id)) {
-	        throw new RuntimeException("No checkin found in Id: " + id);
+	        throw new ResourceNotFoundException(id);
 	    }
 
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new RuntimeException(e.getMessage());
+			throw new DatabaseException(e.getMessage());
 		}
 
 	}

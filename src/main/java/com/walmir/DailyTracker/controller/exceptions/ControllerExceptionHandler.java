@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.walmir.dailytracker.service.exceptions.ProgressLimitExceededException;
+import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,8 +17,16 @@ public class ControllerExceptionHandler {
 
 	@ExceptionHandler(ProgressLimitExceededException.class)
 	public ResponseEntity<StandardError> progressLimitExceededException (ProgressLimitExceededException e, HttpServletRequest request) {
-		String error = "You have already done the maximum number of checkins possible to this date";
+		String error = "Business rule Violation";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request){
+		String error = "Resource not found";
+		HttpStatus status = HttpStatus.NOT_FOUND;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
 	}

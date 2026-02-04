@@ -8,4 +8,8 @@ public class ProgressLimitExceededException extends RuntimeException {
 		super(msg);
 	}
 
+	public ProgressLimitExceededException() {
+		super("You have already done the maximum number of checkins possible to this date");
+	}
+
 }

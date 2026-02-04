@@ -12,6 +12,9 @@ import com.walmir.dailytracker.domain.Challenge;
 import com.walmir.dailytracker.domain.CheckIn;
 import com.walmir.dailytracker.repository.ChallengeRepository;
 import com.walmir.dailytracker.repository.CheckInRepository;
+import com.walmir.dailytracker.service.exceptions.DatabaseException;
+import com.walmir.dailytracker.service.exceptions.ProgressLimitExceededException;
+import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
 
 
@@ -30,7 +33,7 @@ public class ChallengeService {
 
 	public Challenge findbyId(Long id) {
 		return repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("No challenge found in Id: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public Challenge insert(Challenge object) {
@@ -39,7 +42,7 @@ public class ChallengeService {
 
 	public Challenge update(Challenge newEntity, Long id) {
 		Challenge entity = repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("No challenge found in Id: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException(id));
 		updateData(entity, newEntity);
 
 		return repository.save(entity);
@@ -47,13 +50,13 @@ public class ChallengeService {
 
 	public void deleteById(Long id) {
 		if (!repository.existsById(id)) {
-	        throw new RuntimeException("No challenge found in Id: " + id);
+	        throw new ResourceNotFoundException(id);
 	    }
 
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new RuntimeException(e.getMessage());
+			throw new DatabaseException(e.getMessage());
 		}
 
 	}
@@ -64,16 +67,16 @@ public class ChallengeService {
 		entity.setDurationDays(newEntity.getDurationDays());
 	}
 
-	public CheckIn doCheckIn(Long ChallengeId) {
+	public CheckIn doCheckIn(Long challengeId) {
 
-		Challenge challenge = repository.findById(ChallengeId).orElseThrow(() -> new RuntimeException("Challenge not found"));
+		Challenge challenge = repository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException(challengeId));
 
-		long totalCheckIns = checkInrepository.countByChallengeId(ChallengeId);
+		long totalCheckIns = checkInrepository.countByChallengeId(challengeId);
 
 		long daysPassed = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
 
 		if (totalCheckIns >= daysPassed) {
-			throw new RuntimeException("You have already done the maximum number of checkins possible to this date");
+			throw new ProgressLimitExceededException();
 		}
 
 		CheckIn newCheckIn = new CheckIn();
