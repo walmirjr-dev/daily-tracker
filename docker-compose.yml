@@ -1,18 +1,55 @@
+
 services:
   db:
-    image: postgres
+    image: postgres:15-alpine
     container_name: daily-db
-
     environment:
       POSTGRES_DB: dailytracker
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5432:5432"
-
     volumes:
-      - pgdata:/var/lib/postgresql
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dailytracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - daily-network
+
+  backend:
+    build: .
+    container_name: daily-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/dailytracker
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - daily-network
+
+  frontend:
+    build: ../daily-tracker-frontend
+    container_name: daily-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - daily-network
 
 volumes:
   pgdata:
+
+networks:
+  daily-network:
+    driver: bridge
