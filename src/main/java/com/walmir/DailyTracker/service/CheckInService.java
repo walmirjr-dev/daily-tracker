@@ -14,6 +14,8 @@ import com.walmir.dailytracker.repository.CheckInRepository;
 import com.walmir.dailytracker.service.exceptions.DatabaseException;
 import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
+import jakarta.transaction.Transactional;
+
 
 
 @Service
@@ -45,6 +47,20 @@ public class CheckInService {
 
 		return repository.save(entity);
 	}
+
+	@Transactional
+    public void undoLastCheckIn(Long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
+
+        Optional<CheckIn> lastCheckIn = repository.findFirstByChallengeOrderByCheckInDateDesc(challenge);
+
+        if (lastCheckIn.isPresent()) {
+            this.deleteById(lastCheckIn.get().getId());
+        } else {
+            throw new ResourceNotFoundException("Nenhum check-in para desfazer.");
+        }
+    }
 
 	public void deleteById(Long id) {
 	    CheckIn checkIn = repository.findById(id)

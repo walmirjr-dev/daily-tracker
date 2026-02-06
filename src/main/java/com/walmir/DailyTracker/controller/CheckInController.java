@@ -64,6 +64,12 @@ public class CheckInController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@DeleteMapping("/challenge/{challengeId}/undo")
+    public ResponseEntity<Void> undoLastCheckIn(@PathVariable Long challengeId) {
+        service.undoLastCheckIn(challengeId);
+        return ResponseEntity.noContent().build();
+    }	
+
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<CheckIn> update (@PathVariable Long id, @RequestBody CheckIn newEntity) {
 		CheckIn entity = service.update(newEntity, id);
