@@ -56,7 +56,7 @@ public class CheckInService {
 	        repository.deleteById(id);
 	        repository.flush();
 
-	        Optional<CheckIn> lastRemaining = repository.findFirstByChallengeOrderByDateDesc(challenge);
+	        Optional<CheckIn> lastRemaining = repository.findFirstByChallengeOrderByCheckInDateDesc(challenge);
 
 	        if (lastRemaining.isPresent()) {
 	            challenge.setLastCheckInDate(lastRemaining.get().getCheckInDate());

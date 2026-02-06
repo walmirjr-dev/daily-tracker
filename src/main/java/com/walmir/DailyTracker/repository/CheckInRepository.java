@@ -10,5 +10,5 @@ import com.walmir.dailytracker.domain.CheckIn;
 public interface CheckInRepository extends JpaRepository<CheckIn, Long>  {
 	long countByChallengeId(Long challengeId);
 
-	Optional<CheckIn> findFirstByChallengeOrderByDateDesc(Challenge challenge);
+	Optional<CheckIn> findFirstByChallengeOrderByCheckInDateDesc(Challenge challenge);
 }
