@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,8 @@ public class Challenge implements Serializable {
 	private String name;
 	private LocalDate initialDate;
 	private Integer durationDays;
+	@Column(name = "last_check_in_date")
+	private LocalDate lastCheckInDate;
 
 	@OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CheckIn> checkIns;
@@ -70,6 +73,14 @@ public class Challenge implements Serializable {
 
 	public void setDurationDays(Integer durationDays) {
 		this.durationDays = durationDays;
+	}
+
+	public LocalDate getLastCheckInDate() {
+		return lastCheckInDate;
+	}
+
+	public void setLastCheckInDate(LocalDate lastCheckInDate) {
+		this.lastCheckInDate = lastCheckInDate;
 	}
 
 	public List<CheckIn> getCheckIns() {

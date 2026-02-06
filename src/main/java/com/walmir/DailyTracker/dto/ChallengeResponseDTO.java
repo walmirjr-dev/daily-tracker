@@ -12,6 +12,7 @@ public class ChallengeResponseDTO {
 	private String name;
 	private LocalDate initialDate;
 	private Integer durationDays;
+	private LocalDate lastCheckInDate;
 
 	private LocalDate endDate;
 	private long completedCheckIns;
@@ -29,6 +30,7 @@ public class ChallengeResponseDTO {
         this.initialDate = entity.getInitialDate();
         this.endDate = entity.getEndDate();
         this.durationDays = entity.getDurationDays();
+        this.lastCheckInDate = entity.getLastCheckInDate();
 
         this.completedCheckIns = totalCheckIns;
         this.canCheckInToday = allowed;
@@ -106,6 +108,14 @@ public class ChallengeResponseDTO {
 
 	public void setDaysRemaining(long daysRemaining) {
 		this.daysRemaining = daysRemaining;
+	}
+
+	public LocalDate getLastCheckInDate() {
+		return lastCheckInDate;
+	}
+
+	public void setLastCheckInDate(LocalDate lastCheckInDate) {
+		this.lastCheckInDate = lastCheckInDate;
 	}
 
 	public boolean isCanCheckInToday() {

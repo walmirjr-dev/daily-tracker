@@ -108,6 +108,10 @@ public class ChallengeService {
         checkIn.setChallenge(entity);
         checkIn.setCheckInDate(LocalDate.now());
 
+        entity.setLastCheckInDate(checkIn.getCheckInDate());
+
+        repository.save(entity);
+
         return checkInRepository.save(checkIn);
 	}
 
