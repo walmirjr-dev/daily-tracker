@@ -65,13 +65,21 @@ public class ChallengeService {
 		return repository.save(object);
 	}
 
-	public Challenge update(Challenge newEntity, Long id) {
-		Challenge entity = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(id));
-		updateData(entity, newEntity);
+	@Transactional
+    public ChallengeResponseDTO update(Long id, ChallengeResponseDTO dto) {
+        Challenge entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
 
-		return repository.save(entity);
-	}
+        entity.setName(dto.getName());
+        entity.setDurationDays(dto.getDurationDays());
+        entity.setInitialDate(dto.getInitialDate());
+
+        entity = repository.save(entity);
+        long count = checkInRepository.countByChallengeId(id);
+        boolean allowed = checkProgressValidity(entity, count);
+
+        return new ChallengeResponseDTO(entity, count, allowed);
+    }
 
 	public void deleteById(Long id) {
 		if (!repository.existsById(id)) {
@@ -84,12 +92,6 @@ public class ChallengeService {
 			throw new DatabaseException(e.getMessage());
 		}
 
-	}
-
-	private void updateData(Challenge entity, Challenge newEntity) {
-		entity.setName(newEntity.getName());
-		entity.setInitialDate(newEntity.getInitialDate());
-		entity.setDurationDays(newEntity.getDurationDays());
 	}
 
 	public CheckIn doCheckIn(Long challengeId) {

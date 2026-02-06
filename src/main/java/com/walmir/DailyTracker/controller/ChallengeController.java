@@ -56,9 +56,9 @@ public class ChallengeController {
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Challenge> update (@PathVariable Long id, @RequestBody Challenge newEntity) {
-		Challenge entity = service.update(newEntity, id);
-		return ResponseEntity.ok().body(entity);
-	}
+    public ResponseEntity<ChallengeResponseDTO> update(@PathVariable Long id, @RequestBody ChallengeResponseDTO dto) {
+        ChallengeResponseDTO newDto = service.update(id, dto);
+        return ResponseEntity.ok().body(newDto);
+    }
 
 }
