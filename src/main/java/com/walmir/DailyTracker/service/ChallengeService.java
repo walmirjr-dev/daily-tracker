@@ -72,7 +72,6 @@ public class ChallengeService {
 
         entity.setName(dto.getName());
         entity.setDurationDays(dto.getDurationDays());
-        entity.setInitialDate(dto.getInitialDate());
 
         entity = repository.save(entity);
         long count = checkInRepository.countByChallengeId(id);
