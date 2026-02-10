@@ -7,6 +7,8 @@
 
 O **DailyTracker** é uma aplicação Fullstack para gerenciamento de hábitos e desafios pessoais. O sistema permite criar desafios (ex: "30 dias de Leitura") e registrar o progresso, oferecendo flexibilidade para recuperar dias perdidos e visualização clara da consistência.
 
+O projeto foi criado para estudo, e, principalmente para uso pessoal, queria uma aplicação simples onde eu poderia registrar e visualizar meus progressos.
+
 Este repositório contém o **Backend (API REST)** e os arquivos de orquestração **Docker** para subir o sistema completo (Backend + Frontend + Banco).
 
 🔗 **Repositório do Frontend:** [https://github.com/walmirjr-dev/daily-tracker-frontend]
