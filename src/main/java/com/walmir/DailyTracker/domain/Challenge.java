@@ -25,7 +25,8 @@ public class Challenge implements Serializable {
 	private Long id;
 	private String name;
 	private LocalDate initialDate;
-	private Integer durationDays;
+	private Integer targetDays;
+	private LocalDate endDate;
 	@Column(name = "last_check_in_date")
 	private LocalDate lastCheckInDate;
 
@@ -35,12 +36,14 @@ public class Challenge implements Serializable {
 	public Challenge() {
 	}
 
-	public Challenge(Long id, String name, LocalDate initialDate, Integer durationDays) {
+	public Challenge(Long id, String name, LocalDate initialDate, Integer targetDays, LocalDate endDate) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.initialDate = initialDate;
-		this.durationDays = durationDays;
+		this.targetDays = targetDays;
+		this.endDate = endDate;
+
 	}
 
 	public Long getId() {
@@ -67,12 +70,20 @@ public class Challenge implements Serializable {
 		this.initialDate = initialDate;
 	}
 
-	public Integer getDurationDays() {
-		return durationDays;
+	public Integer getTargetDays() {
+		return targetDays;
 	}
 
-	public void setDurationDays(Integer durationDays) {
-		this.durationDays = durationDays;
+	public void setTargetDays(Integer durationDays) {
+		this.targetDays = durationDays;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
 	}
 
 	public LocalDate getLastCheckInDate() {
@@ -85,10 +96,6 @@ public class Challenge implements Serializable {
 
 	public List<CheckIn> getCheckIns() {
 		return checkIns;
-	}
-
-	public LocalDate getEndDate() {
-		return initialDate.plusDays(durationDays);
 	}
 
 	@Override

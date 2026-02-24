@@ -11,7 +11,7 @@ public class ChallengeResponseDTO {
 	private Long id;
 	private String name;
 	private LocalDate initialDate;
-	private Integer durationDays;
+	private Integer targetDays;
 	private LocalDate lastCheckInDate;
 
 	private LocalDate endDate;
@@ -29,7 +29,7 @@ public class ChallengeResponseDTO {
         this.name = entity.getName();
         this.initialDate = entity.getInitialDate();
         this.endDate = entity.getEndDate();
-        this.durationDays = entity.getDurationDays();
+        this.targetDays = entity.getTargetDays();
         this.lastCheckInDate = entity.getLastCheckInDate();
 
         this.completedCheckIns = totalCheckIns;
@@ -39,8 +39,8 @@ public class ChallengeResponseDTO {
         long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), entity.getEndDate());
         this.daysRemaining = Math.max(0, daysBetween);
 
-        if (durationDays > 0) {
-            this.progressPercentage = (totalCheckIns * 100.0) / durationDays;
+        if (targetDays > 0) {
+            this.progressPercentage = (totalCheckIns * 100.0) / targetDays;
         } else {
             this.progressPercentage = 0.0;
         }
@@ -70,12 +70,12 @@ public class ChallengeResponseDTO {
 		this.initialDate = initialDate;
 	}
 
-	public Integer getDurationDays() {
-		return durationDays;
+	public Integer getTargetDays() {
+		return targetDays;
 	}
 
-	public void setDurationDays(Integer durationDays) {
-		this.durationDays = durationDays;
+	public void setTargetDays(Integer durationDays) {
+		this.targetDays = durationDays;
 	}
 
 	public LocalDate getEndDate() {

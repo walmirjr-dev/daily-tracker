@@ -62,23 +62,31 @@ public class ChallengeService {
     }
 
 	public Challenge insert(Challenge object) {
+		validateChallengeViability(object);
 		return repository.save(object);
 	}
 
 	@Transactional
-    public ChallengeResponseDTO update(Long id, ChallengeResponseDTO dto) {
-        Challenge entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
+	public ChallengeResponseDTO update(Long id, ChallengeResponseDTO dto) {
+	    Challenge entity = repository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
 
-        entity.setName(dto.getName());
-        entity.setDurationDays(dto.getDurationDays());
+	    entity.setName(dto.getName());
+	    entity.setTargetDays(dto.getTargetDays());
 
-        entity = repository.save(entity);
-        long count = checkInRepository.countByChallengeId(id);
-        boolean allowed = checkProgressValidity(entity, count);
+	    if (dto.getEndDate() != null) {
+	        entity.setEndDate(dto.getEndDate());
+	    }
 
-        return new ChallengeResponseDTO(entity, count, allowed);
-    }
+	    validateChallengeViability(entity);
+
+	    entity = repository.save(entity);
+
+	    long count = checkInRepository.countByChallengeId(id);
+	    boolean allowed = checkProgressValidity(entity, count);
+
+	    return new ChallengeResponseDTO(entity, count, allowed);
+	}
 
 	public void deleteById(Long id) {
 		if (!repository.existsById(id)) {
@@ -119,4 +127,20 @@ public class ChallengeService {
         long diasCorridos = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
         return totalCheckIns < diasCorridos;
     }
+
+	private void validateChallengeViability (Challenge challenge) {
+
+		LocalDate initalDate = challenge.getInitialDate();
+		LocalDate endDate = challenge.getEndDate();
+		int targetDays = challenge.getTargetDays();
+		long totalDays = ChronoUnit.DAYS.between(initalDate, endDate) + 1;
+
+		if (!endDate.isAfter(initalDate)) {
+			throw new ProgressLimitExceededException();
+		}
+
+		if(totalDays < targetDays) {
+			throw new ProgressLimitExceededException();
+		}
+	}
 }
