@@ -13,6 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
+
+
 
 @Entity
 @Table(name = "tb_challenge")
@@ -23,9 +26,14 @@ public class Challenge implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank
 	private String name;
+	@NotNull
 	private LocalDate initialDate;
+	@Min(1)
 	private Integer targetDays;
+	@NotNull
+	@FutureOrPresent
 	private LocalDate endDate;
 	@Column(name = "last_check_in_date")
 	private LocalDate lastCheckInDate;

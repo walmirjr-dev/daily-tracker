@@ -3,18 +3,24 @@ package com.walmir.dailytracker.dto;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import jakarta.validation.constraints.*;
 
 import com.walmir.dailytracker.domain.Challenge;
 
 public class ChallengeResponseDTO {
 
 	private Long id;
-	private String name;
-	private LocalDate initialDate;
-	private Integer targetDays;
-	private LocalDate lastCheckInDate;
-
-	private LocalDate endDate;
+	@NotBlank(message = "Name is required")
+    private String name;
+    @NotNull(message = "Initial date is required")
+    private LocalDate initialDate;
+    @NotNull(message = "Target days is required")
+    @Min(value = 1, message = "Target days must be at least 1")
+    private Integer targetDays;
+    @NotNull(message = "End date is required")
+    @FutureOrPresent(message = "End date cannot be in the past")
+    private LocalDate endDate;
+    private LocalDate lastCheckInDate;
 	private long completedCheckIns;
 	private Double progressPercentage;
 	private long daysRemaining;
@@ -74,8 +80,8 @@ public class ChallengeResponseDTO {
 		return targetDays;
 	}
 
-	public void setTargetDays(Integer durationDays) {
-		this.targetDays = durationDays;
+	public void setTargetDays(Integer targetDays) {
+		this.targetDays = targetDays;
 	}
 
 	public LocalDate getEndDate() {

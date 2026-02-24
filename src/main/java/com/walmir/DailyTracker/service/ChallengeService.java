@@ -16,7 +16,7 @@ import com.walmir.dailytracker.dto.ChallengeResponseDTO;
 import com.walmir.dailytracker.repository.ChallengeRepository;
 import com.walmir.dailytracker.repository.CheckInRepository;
 import com.walmir.dailytracker.service.exceptions.DatabaseException;
-import com.walmir.dailytracker.service.exceptions.ProgressLimitExceededException;
+import com.walmir.dailytracker.service.exceptions.BusinessRuleViolationException;
 import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
 
@@ -109,7 +109,7 @@ public class ChallengeService {
         long count = checkInRepository.countByChallengeId(challengeId);
 
         if (!checkProgressValidity(entity, count)) {
-            throw new ProgressLimitExceededException();
+            throw new BusinessRuleViolationException("You have reached the maximum number of checkIns due to this date");
         }
 
         CheckIn checkIn = new CheckIn();
@@ -136,11 +136,11 @@ public class ChallengeService {
 		long totalDays = ChronoUnit.DAYS.between(initalDate, endDate) + 1;
 
 		if (!endDate.isAfter(initalDate)) {
-			throw new ProgressLimitExceededException();
+			throw new BusinessRuleViolationException("End date must be after intial date");
 		}
 
 		if(totalDays < targetDays) {
-			throw new ProgressLimitExceededException();
+			throw new BusinessRuleViolationException("The selected time frame is shorter than the challenge goal");
 		}
 	}
 }

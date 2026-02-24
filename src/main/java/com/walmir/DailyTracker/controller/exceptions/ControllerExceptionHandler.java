@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.walmir.dailytracker.service.exceptions.ProgressLimitExceededException;
+import com.walmir.dailytracker.service.exceptions.BusinessRuleViolationException;
 import com.walmir.dailytracker.service.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-	@ExceptionHandler(ProgressLimitExceededException.class)
-	public ResponseEntity<StandardError> progressLimitExceededException (ProgressLimitExceededException e, HttpServletRequest request) {
+	@ExceptionHandler(BusinessRuleViolationException.class)
+	public ResponseEntity<StandardError> businessRuleViolation (BusinessRuleViolationException e, HttpServletRequest request) {
 		String error = "Business rule Violation";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
