@@ -43,7 +43,7 @@ public class ChallengeResponseDTO {
 
 
         long daysBetween = ChronoUnit.DAYS.between(LocalDate.now(), entity.getEndDate());
-        this.daysRemaining = Math.max(0, daysBetween);
+        this.daysRemaining = Math.max(0, daysBetween + 1);
 
         if (targetDays > 0) {
             this.progressPercentage = (totalCheckIns * 100.0) / targetDays;
