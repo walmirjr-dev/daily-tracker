@@ -1,5 +1,6 @@
 package com.walmir.dailytracker.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.walmir.dailytracker.domain.Challenge;
 import com.walmir.dailytracker.domain.CheckIn;
+import com.walmir.dailytracker.dto.CheckInResponseDTO;
 import com.walmir.dailytracker.repository.ChallengeRepository;
 import com.walmir.dailytracker.repository.CheckInRepository;
 import com.walmir.dailytracker.service.exceptions.DatabaseException;
@@ -27,25 +29,31 @@ public class CheckInService {
 	@Autowired
 	private ChallengeRepository challengeRepository;
 
-	public List<CheckIn> findAll() {
-		return repository.findAll();
+	@Transactional
+	public List<CheckInResponseDTO> findAll() {
+		List<CheckIn> list = repository.findAll();
+
+		List<CheckInResponseDTO> dtoList = new ArrayList<>();
+
+		for(CheckIn x : list) {
+			CheckInResponseDTO dto = new CheckInResponseDTO(x);
+			dtoList.add(dto);
+		}
+
+		return dtoList;
 	}
 
-	public CheckIn findById(Long id) {
-		return repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(id));
-	}
-
-	public CheckIn insert(CheckIn object) {
-		return repository.save(object);
-	}
-
-	public CheckIn update(CheckIn newEntity, Long id) {
+	public CheckInResponseDTO findById(Long id) {
 		CheckIn entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(id));
-		updateData(entity, newEntity);
 
-		return repository.save(entity);
+		return new CheckInResponseDTO(entity);
+	}
+
+	public CheckInResponseDTO insert(CheckIn object) {
+		CheckIn saved = repository.save(object);
+
+		return new CheckInResponseDTO(saved);
 	}
 
 	@Transactional
@@ -86,9 +94,4 @@ public class CheckInService {
 	        throw new DatabaseException(e.getMessage());
 	    }
 	}
-
-	private void updateData(CheckIn entity, CheckIn newEntity) {
-		entity.setCheckInDate(newEntity.getCheckInDate());
-	}
-
 }

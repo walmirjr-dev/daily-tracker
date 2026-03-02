@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.walmir.dailytracker.domain.CheckIn;
+import com.walmir.dailytracker.dto.CheckInResponseDTO;
 import com.walmir.dailytracker.service.ChallengeService;
 import com.walmir.dailytracker.service.CheckInService;
 
@@ -31,24 +29,24 @@ public class CheckInController {
 	private ChallengeService challengeService;
 
 	@GetMapping
-	public ResponseEntity<List<CheckIn>> findAll() {
+	public ResponseEntity<List<CheckInResponseDTO>> findAll() {
 
-		List<CheckIn> list = service.findAll();
+		List<CheckInResponseDTO> list = service.findAll();
 
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<CheckIn> findById(@PathVariable Long id) {
-		CheckIn entity = service.findById(id);
+	public ResponseEntity<CheckInResponseDTO> findById(@PathVariable Long id) {
+		CheckInResponseDTO entity = service.findById(id);
 
 		return ResponseEntity.ok().body(entity);
 	}
 
 	@PostMapping("/challenge/{challengeId}")
-	public ResponseEntity<CheckIn> insert(@PathVariable Long challengeId) {
+	public ResponseEntity<CheckInResponseDTO> insert(@PathVariable Long challengeId) {
 
-	    CheckIn newEntity = challengeService.doCheckIn(challengeId);
+	    CheckInResponseDTO newEntity = challengeService.doCheckIn(challengeId);
 
 	    URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 	            .path("/{id}")
@@ -68,12 +66,5 @@ public class CheckInController {
     public ResponseEntity<Void> undoLastCheckIn(@PathVariable Long challengeId) {
         service.undoLastCheckIn(challengeId);
         return ResponseEntity.noContent().build();
-    }	
-
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<CheckIn> update (@PathVariable Long id, @RequestBody CheckIn newEntity) {
-		CheckIn entity = service.update(newEntity, id);
-		return ResponseEntity.ok().body(entity);
-	}
-
+    }
 }

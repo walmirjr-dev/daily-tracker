@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.walmir.dailytracker.domain.Challenge;
 import com.walmir.dailytracker.domain.CheckIn;
 import com.walmir.dailytracker.dto.ChallengeResponseDTO;
+import com.walmir.dailytracker.dto.CheckInResponseDTO;
 import com.walmir.dailytracker.repository.ChallengeRepository;
 import com.walmir.dailytracker.repository.CheckInRepository;
 import com.walmir.dailytracker.service.exceptions.DatabaseException;
@@ -107,7 +108,7 @@ public class ChallengeService {
 
 	}
 
-	public CheckIn doCheckIn(Long challengeId) {
+	public CheckInResponseDTO doCheckIn(Long challengeId) {
 
 		Challenge entity = repository.findById(challengeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
@@ -126,7 +127,9 @@ public class ChallengeService {
 
         repository.save(entity);
 
-        return checkInRepository.save(checkIn);
+        checkInRepository.save(checkIn);
+
+        return new CheckInResponseDTO(checkIn);
 	}
 
 	private boolean checkProgressValidity(Challenge challenge, long totalCheckIns) {
