@@ -43,8 +43,8 @@ public class ChallengeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Challenge> insert (@RequestBody Challenge entity) {
-		Challenge newEntity = service.insert(entity);
+	public ResponseEntity<ChallengeResponseDTO> insert (@RequestBody Challenge entity) {
+		ChallengeResponseDTO newEntity = service.insert(entity);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newEntity.getId()).toUri();
 		return ResponseEntity.created(uri).body(newEntity);
 	}

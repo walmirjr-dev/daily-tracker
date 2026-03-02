@@ -61,9 +61,15 @@ public class ChallengeService {
         return new ChallengeResponseDTO(entity, count, allowed);
     }
 
-	public Challenge insert(Challenge object) {
-		validateChallengeViability(object);
-		return repository.save(object);
+	@Transactional
+	public ChallengeResponseDTO insert(Challenge object) {
+	    validateChallengeViability(object);
+	    Challenge saved = repository.save(object);
+
+	    long count = checkInRepository.countByChallengeId(saved.getId());
+	    boolean allowed = checkProgressValidity(saved, count);
+
+	    return new ChallengeResponseDTO(saved, count, allowed);
 	}
 
 	@Transactional
