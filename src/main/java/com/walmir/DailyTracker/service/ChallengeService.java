@@ -74,15 +74,15 @@ public class ChallengeService {
 	}
 
 	@Transactional
-	public ChallengeResponseDTO update(Long id, ChallengeResponseDTO dto) {
+	public ChallengeResponseDTO update(Long id, Challenge newEntity) {
 	    Challenge entity = repository.findById(id)
 	            .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
 
-	    entity.setName(dto.getName());
-	    entity.setTargetDays(dto.getTargetDays());
+	    entity.setName(newEntity.getName());
+	    entity.setTargetDays(newEntity.getTargetDays());
 
-	    if (dto.getEndDate() != null) {
-	        entity.setEndDate(dto.getEndDate());
+	    if (newEntity.getEndDate() != null) {
+	        entity.setEndDate(newEntity.getEndDate());
 	    }
 
 	    validateChallengeViability(entity);
@@ -133,8 +133,8 @@ public class ChallengeService {
 	}
 
 	private boolean checkProgressValidity(Challenge challenge, long totalCheckIns) {
-        long diasCorridos = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
-        return totalCheckIns < diasCorridos;
+        long daysPassed = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
+        return totalCheckIns < daysPassed;
     }
 
 	private void validateChallengeViability (Challenge challenge) {
