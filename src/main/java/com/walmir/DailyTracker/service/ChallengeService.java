@@ -42,7 +42,7 @@ public class ChallengeService {
 
         for (Challenge x : list) {
             long count = checkInRepository.countByChallengeId(x.getId());
-            boolean allowed = checkProgressValidity(x, count);
+            boolean allowed = isCheckInAllowed(x, count);
 
             ChallengeResponseDTO dto = new ChallengeResponseDTO(x, count, allowed);
             dtoList.add(dto);
@@ -57,7 +57,7 @@ public class ChallengeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Challenge not found"));
 
         long count = checkInRepository.countByChallengeId(id);
-        boolean allowed = checkProgressValidity(entity, count);
+        boolean allowed = isCheckInAllowed(entity, count);
 
         return new ChallengeResponseDTO(entity, count, allowed);
     }
@@ -68,7 +68,7 @@ public class ChallengeService {
 	    Challenge saved = repository.save(object);
 
 	    long count = checkInRepository.countByChallengeId(saved.getId());
-	    boolean allowed = checkProgressValidity(saved, count);
+	    boolean allowed = isCheckInAllowed(saved, count);
 
 	    return new ChallengeResponseDTO(saved, count, allowed);
 	}
@@ -90,7 +90,7 @@ public class ChallengeService {
 	    entity = repository.save(entity);
 
 	    long count = checkInRepository.countByChallengeId(id);
-	    boolean allowed = checkProgressValidity(entity, count);
+	    boolean allowed = isCheckInAllowed(entity, count);
 
 	    return new ChallengeResponseDTO(entity, count, allowed);
 	}
@@ -115,7 +115,7 @@ public class ChallengeService {
 
         long count = checkInRepository.countByChallengeId(challengeId);
 
-        if (!checkProgressValidity(entity, count)) {
+        if (!isCheckInAllowed(entity, count)) {
             throw new BusinessRuleViolationException("You have reached the maximum number of checkIns due to this date");
         }
 
@@ -132,7 +132,7 @@ public class ChallengeService {
         return new CheckInResponseDTO(checkIn);
 	}
 
-	private boolean checkProgressValidity(Challenge challenge, long totalCheckIns) {
+	private boolean isCheckInAllowed(Challenge challenge, long totalCheckIns) {
         long daysPassed = ChronoUnit.DAYS.between(challenge.getInitialDate(), LocalDate.now()) + 1;
         return totalCheckIns < daysPassed;
     }
