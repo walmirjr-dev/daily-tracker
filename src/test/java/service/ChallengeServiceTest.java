@@ -47,8 +47,8 @@ public class ChallengeServiceTest {
 
         //Arrange
         Challenge challenge = new Challenge(1L, "Test", LocalDate.now(), 30, LocalDate.now().plusDays(50));
-        when(repository.findById(1L)).thenReturn(Optional.of(challenge));
-        when(checkInRepository.countByChallengeId(1L)).thenReturn(1L);
+        when(repository.findById(challenge.getId())).thenReturn(Optional.of(challenge));
+        when(checkInRepository.countByChallengeId(challenge.getId())).thenReturn(1L);
 
         //Act + Assert
         assertThrows(BusinessRuleViolationException.class, () -> challengeService.doCheckIn(1L));
@@ -59,11 +59,11 @@ public class ChallengeServiceTest {
 
         //Arrange
         Challenge challenge = new Challenge(1L, "Test", LocalDate.now(), 30, LocalDate.now().plusDays(50));
-        when(repository.findById(1L)).thenReturn(Optional.of(challenge));
-        when(checkInRepository.countByChallengeId(1L)).thenReturn(0L);
+        when(repository.findById(challenge.getId())).thenReturn(Optional.of(challenge));
+        when(checkInRepository.countByChallengeId(challenge.getId())).thenReturn(0L);
 
         //Act
-        CheckInResponseDTO result = challengeService.doCheckIn(1L);
+        CheckInResponseDTO result = challengeService.doCheckIn(challenge.getId());
 
         //Assert
         assertNotNull(result);
@@ -95,7 +95,7 @@ public class ChallengeServiceTest {
         //Arrange
         Challenge challenge = new Challenge(1L, "Test", LocalDate.now(), 30, LocalDate.now().plusDays(50));
         when(repository.save(challenge)).thenReturn(challenge);
-        when(checkInRepository.countByChallengeId(1L)).thenReturn(0L);
+        when(checkInRepository.countByChallengeId(challenge.getId())).thenReturn(0L);
 
         //Act
         ChallengeResponseDTO result = challengeService.insert(challenge);
