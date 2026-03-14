@@ -62,6 +62,14 @@ services:
     networks:
       - daily-network
 
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: daily-loki
+    ports:
+      - "3100:3100"
+    networks:
+      - daily-network
+
   grafana:
     image: grafana/grafana:latest
     container_name: daily-grafana
@@ -69,11 +77,14 @@ services:
       - "3001:3000"
     depends_on:
       - prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
     networks:
       - daily-network
 
 volumes:
   pgdata:
+  grafana-data:
 
 networks:
   daily-network:
